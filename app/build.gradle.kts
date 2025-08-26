@@ -49,4 +49,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation ("androidx.fragment:fragment-testing:1.4.1")
+    testImplementation(kotlin("test"))
+    debugImplementation ("androidx.test.ext:test-storage:1.5.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
 }

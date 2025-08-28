@@ -10,7 +10,7 @@ class CrimeListViewModel : ViewModel() {
 
 
     init {
-        for ( i in 0 until 100) {
+        for ( i in 0 until 99) {
             val crime = Crime(
                 id = UUID.randomUUID(),
                 title = "Crime #$i",

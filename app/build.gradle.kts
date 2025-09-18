@@ -47,6 +47,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation(libs.androidx.recyclerview)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

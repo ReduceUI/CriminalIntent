@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent
 
+import android.text.format.DateFormat
 import androidx.lifecycle.ViewModel
 import java.util.Date
 import java.util.UUID
@@ -7,7 +8,6 @@ import java.util.UUID
 class CrimeListViewModel : ViewModel() {
 
     val crimes = mutableListOf<Crime>()
-
 
     init {
         for ( i in 0 until 99) {

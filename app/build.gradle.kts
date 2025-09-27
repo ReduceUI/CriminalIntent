@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.androidx.core.ktx){
         exclude(group = "org.jetbrains", module = "annotations")
     }
-    implementation("org.jetbrains:annotations:23.0.0")
+    implementation(libs.annotations)
 
 
     implementation(libs.androidx.appcompat){
@@ -88,5 +88,7 @@ dependencies {
 
     kapt (libs.room.compiler)
     implementation (libs.androidx.room.ktx)
+
+    
 
 }

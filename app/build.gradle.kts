@@ -82,7 +82,9 @@ dependencies {
     debugImplementation (libs.androidx.fragment.testing)
     testImplementation(kotlin("test"))
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
-//    implementation (libs.androidx.recyclerview)
+
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     kapt (libs.room.compiler)
     implementation (libs.androidx.room.ktx)

@@ -1,21 +1,21 @@
 package com.bignerdranch.android.criminalintent
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import java.util.Date
-import java.util.UUID
 
 class CrimeDetailFragment : Fragment() {
     private var _binding: FragmentCrimeDetailBinding? = null
@@ -41,6 +41,25 @@ class CrimeDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val callback = object  : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentCrime = crimeDetailViewModel.crime.value
+
+                if (currentCrime?.title.isNullOrBlank()) {
+                    Snackbar.make(
+                        binding.root,
+                        "Please enter a title.",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                } else {
+                    isEnabled = false
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding.apply {
             crimeTitle.doOnTextChanged { text, _, _, _ ->

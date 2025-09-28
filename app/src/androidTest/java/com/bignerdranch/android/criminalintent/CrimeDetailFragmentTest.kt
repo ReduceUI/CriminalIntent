@@ -12,9 +12,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.assertTrue
-import org.junit.Assert.assertEquals
-import com.bignerdranch.android.criminalintent.CrimeDetailFragment
+import com.bignerdranch.android.criminalintent.ui.MainActivity
 
 @RunWith(AndroidJUnit4::class)
 class CrimeDetailFragmentTest {

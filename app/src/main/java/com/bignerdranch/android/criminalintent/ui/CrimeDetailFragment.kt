@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bignerdranch.android.criminalintent.Crime
+import com.bignerdranch.android.criminalintent.viewmodel.CrimeDetailViewModel
+import com.bignerdranch.android.criminalintent.viewmodel.CrimeDetailViewModelFactory
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -58,7 +61,6 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
         }
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding.apply {
@@ -66,10 +68,6 @@ class CrimeDetailFragment : Fragment() {
                 crimeDetailViewModel.updateCrime { oldCrime ->
                     oldCrime.copy(title = text.toString())
                 }
-            }
-
-            crimeDate.apply {
-                isEnabled = false
             }
 
             crimeSolved.setOnCheckedChangeListener { _, isChecked ->
@@ -99,6 +97,11 @@ class CrimeDetailFragment : Fragment() {
                 crimeTitle.setText(crime.title)
             }
             crimeDate.text = crime.date.toString()
+            crimeDate.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.selectDate()
+                )
+            }
             crimeSolved.isChecked = crime.isSolved
         }
     }

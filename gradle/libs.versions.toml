@@ -18,6 +18,7 @@ recyclerview = "1.4.0"
 # kotlin and room issues
 kotlin-kapt = "2.2.20" #"1.8.20" #"1.9.23"
 room = "2.8.0"
+safeargs = "2.9.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,4 +49,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 # kotlin and room issues
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-kapt" }
+safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeargs"}
 

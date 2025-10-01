@@ -3,6 +3,9 @@ package com.bignerdranch.android.criminalintent.ui
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
@@ -37,6 +40,11 @@ class CrimeDetailFragment : Fragment() {
         CrimeDetailViewModelFactory(args.crimeID)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +54,10 @@ class CrimeDetailFragment : Fragment() {
             FragmentCrimeDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -114,6 +126,36 @@ class CrimeDetailFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_crime -> {
+                deleteCurrentCrime()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun deleteCurrentCrime() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            crimeDetailViewModel.crime.value?.let { crime ->
+                crimeDetailViewModel.deleteCrime(crime)
+            }
+            findNavController().popBackStack()
+        }
+    }
+
+
+
+
+
+
 
     private fun updateUi(crime: Crime) {
         binding.apply {

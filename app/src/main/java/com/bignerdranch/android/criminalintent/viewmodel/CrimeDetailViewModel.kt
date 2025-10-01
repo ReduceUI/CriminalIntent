@@ -32,9 +32,11 @@ class CrimeDetailViewModel(crimeID: UUID) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-
         crime.value?.let { crimeRepository.updateCrime(it) }
+    }
 
+    suspend fun deleteCrime(crime: Crime) {
+        crimeRepository.deleteCrime(crime)
     }
 }
 

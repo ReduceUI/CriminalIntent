@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:tint="#000000"
+    android:viewportHeight="960"
+    android:viewportWidth="960"
+    android:width="24dp">
+
+    <!-- Path data for a standard trash can icon (delete/bin) -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M240 800q-33 0-56.5-23.5T160 720V240h-80V160h240v-40h240v40h240v80h-80v480q0 33-23.5 56.5T720 800H240Zm80-80h320V320H320v400Zm120-400h80v320h-80V320Zm120 0h80v320h-80V320Z"/>
+</vector>

@@ -161,13 +161,15 @@ class CrimeDetailFragment : Fragment() {
             if (crimeTitle.text.toString() != crime.title) {
                 crimeTitle.setText(crime.title)
             }
-            crimeDate.text = crime.date.toString()
+            // Date button
+            crimeDate.text = DateFormat.format(DATE_FORMAT, crime.date).toString()
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectDate(crime.date)
                 )
             }
-            crimeTime.text = getString(R.string.update_time_label)
+            // time button
+            crimeTime.text = DateFormat.format(TIME_FORMAT, crime.date).toString()
             crimeTime.setOnClickListener{
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectTime(crime.date)

@@ -140,14 +140,19 @@ class CrimeDetailFragment : Fragment() {
 
             crimeCamera.setOnClickListener {
                 photoName = "IMG_${Date()}.JPG"
-                val photoFile = File(requireContext().applicationContext.filesDir,
-                    photoName)
+
+                val nonNullPhotoName = photoName!!
+
+                val photoFile = File(
+                    requireContext().applicationContext.filesDir,
+                    nonNullPhotoName
+                )
+
                 val photoUri = FileProvider.getUriForFile(
                     requireContext(),
                     "com.bignerdranch.android.criminalintent.fileprovider",
                     photoFile
                 )
-
                 takePhoto.launch(photoUri)
             }
 
@@ -188,12 +193,16 @@ class CrimeDetailFragment : Fragment() {
         _binding = null
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        @Suppress("DEPRECATION")
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_crime_detail, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        @Suppress("DEPRECATION")
         return when (item.itemId) {
             R.id.delete_crime -> {
                 deleteCurrentCrime()

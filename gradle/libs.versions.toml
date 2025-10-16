@@ -19,6 +19,7 @@ recyclerview = "1.4.0"
 kotlin-kapt = "2.2.20" #"1.8.20" #"1.9.23"
 room = "2.8.0"
 safeargs = "2.9.5"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +43,7 @@ androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview"
 # kotlin and room issues
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

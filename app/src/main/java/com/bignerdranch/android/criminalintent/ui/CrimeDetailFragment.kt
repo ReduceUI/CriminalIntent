@@ -1,8 +1,11 @@
 package com.bignerdranch.android.criminalintent.ui
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +20,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
@@ -34,6 +39,9 @@ import com.bignerdranch.android.criminalintent.viewmodel.CrimeDetailViewModel
 import com.bignerdranch.android.criminalintent.viewmodel.CrimeDetailViewModelFactory
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import com.bignerdranch.android.criminalintent.getScaledBitmap
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.io.File
@@ -54,6 +62,21 @@ class CrimeDetailFragment : Fragment() {
         CrimeDetailViewModelFactory(args.crimeID)
     }
 
+    //GPS
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @SuppressLint("MissingPermission")
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            getUpdatedGps()
+        } else {
+            Snackbar.make(
+                binding.root, "Cannot update GPS.",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
 
     private val selectSuspect = registerForActivityResult(
         ActivityResultContracts.PickContact()
@@ -77,6 +100,8 @@ class CrimeDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         @Suppress("DEPRECATION")
         setHasOptionsMenu(true)
+        //GPS
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     override fun onCreateView(
@@ -89,10 +114,7 @@ class CrimeDetailFragment : Fragment() {
         return binding.root
     }
 
-
-
-
-
+    @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -156,9 +178,17 @@ class CrimeDetailFragment : Fragment() {
                 takePhoto.launch(photoUri)
             }
 
-            //removed null
             val captureImageIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
             crimeCamera.isEnabled = canResolveIntent(captureImageIntent)
+
+            //GPS Button
+            updateGps.setOnClickListener {
+                checkLocationPermissionAndGetGps()
+            }
+            updateGps.isEnabled = false
+            if (isLocationPermissionGranted()) {
+                updateGps.isEnabled = true
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -221,6 +251,57 @@ class CrimeDetailFragment : Fragment() {
         }
     }
 
+    //GPS checks
+    private fun isLocationPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    private fun checkLocationPermissionAndGetGps() {
+        if (isLocationPermissionGranted()) {
+            getUpdatedGps()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    @Suppress("MissingPermission")
+    private fun getUpdatedGps() {
+        try {
+
+            @Suppress("DEPRECATION")
+            fusedLocationClient.getCurrentLocation(
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
+                null
+            ).addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    crimeDetailViewModel.updateCrime { oldCrime ->
+                        oldCrime.copy(
+                            latitude = location.latitude,
+                            longitude = location.longitude
+                        )
+                    }
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "Ensure GPS is enabled.",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+            binding.updateGps.isEnabled = true
+        } catch (e: SecurityException) {
+            Snackbar.make(
+                binding.root,
+                "Location permission Required. Check Settings.",
+                Snackbar.LENGTH_LONG
+            ).show()
+            binding.updateGps.isEnabled = false
+        }
+    }
+
     private fun updateUi(crime: Crime) {
         binding.apply {
             if (crimeTitle.text.toString() != crime.title) {
@@ -262,6 +343,13 @@ class CrimeDetailFragment : Fragment() {
             crimeSuspect.text = crime.suspect.ifEmpty {
                 getString(R.string.crime_suspect_text)
             }
+
+            //GPS update display
+            latitude.text = getString(R.string.latitude_label)//, String.format("%.4f", crime.latitude))
+            longitude.text = getString(R.string.longitude_label)//, String.format("%.4f", crime.longitude))
+            updateGps.isEnabled = isLocationPermissionGranted()
+
+
 
             updatePhoto(crime.photoFileName)
         }

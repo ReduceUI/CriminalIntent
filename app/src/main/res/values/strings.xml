@@ -22,6 +22,10 @@
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="send_report">Send crime report via</string>
     <string name="crime_photo_full_size">Full Size</string>
+    <string name="latitude_label">LAT</string>
+    <string name="longitude_label">LONG</string>
+    <string name="latitude_title">LAT</string>
+    <string name="longitude_title">LONG</string>
 
 
 </resources>

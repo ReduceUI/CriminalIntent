@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -19,6 +20,7 @@
 
             <ImageView
                 android:id="@+id/crime_photo"
+                android:contentDescription="@string/a_picture_of_the_subject"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:scaleType="centerInside"
@@ -27,6 +29,7 @@
 
             <ImageButton
                 android:id="@+id/crime_camera"
+                android:contentDescription="@string/camera_button"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_camera" />
@@ -105,28 +108,18 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:text="@string/latitude_title" />
-
-            <TextView
                 android:id="@+id/latitude"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline5"
-                android:text="@string/latitude_label" />
-
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:text="@string/longitude_title" />
+                tools:text="LAT: 11.8584" />
 
             <TextView
                 android:id="@+id/longitude"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline5"
-                android:text="@string/longitude_label" />
+                tools:text="LONG: 22.2945" />
 
 
 
@@ -138,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Update GPS" />
+            android:text="@string/update_gps_button" />
 
     </LinearLayout>
 
@@ -146,6 +139,6 @@
         android:id="@+id/show_map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Map" />
+        android:text="@string/show_map_button" />
 
 </LinearLayout>

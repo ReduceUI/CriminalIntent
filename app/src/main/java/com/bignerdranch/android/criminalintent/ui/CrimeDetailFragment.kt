@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -49,6 +50,7 @@ import java.util.Date
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 private const val TIME_FORMAT = "hh:mm a"
+private const val TAG = "CrimeDetailFragment"
 
 class CrimeDetailFragment : Fragment() {
     private var _binding: FragmentCrimeDetailBinding? = null
@@ -185,10 +187,11 @@ class CrimeDetailFragment : Fragment() {
             updateGps.setOnClickListener {
                 checkLocationPermissionAndGetGps()
             }
-            updateGps.isEnabled = false
-            if (isLocationPermissionGranted()) {
-                updateGps.isEnabled = true
-            }
+            updateGps.isEnabled = true
+//            updateGps.isEnabled = false
+//            if (isLocationPermissionGranted()) {
+//                updateGps.isEnabled = true
+//            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -269,6 +272,7 @@ class CrimeDetailFragment : Fragment() {
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     @Suppress("MissingPermission")
     private fun getUpdatedGps() {
+        Log.d(TAG, "Attempting to get updated GPS location...") // <--- LOG 1
         try {
 
             @Suppress("DEPRECATION")
@@ -276,7 +280,9 @@ class CrimeDetailFragment : Fragment() {
                 LocationRequest.PRIORITY_HIGH_ACCURACY,
                 null
             ).addOnSuccessListener { location: Location? ->
+                Log.d(TAG, "Location success listener triggered.") // <--- LOG 2
                 if (location != null) {
+                    Log.d(TAG, "Location received: Lat=${location.latitude}, Lon=${location.longitude}") // <--- LOG 3
                     crimeDetailViewModel.updateCrime { oldCrime ->
                         oldCrime.copy(
                             latitude = location.latitude,
@@ -284,6 +290,7 @@ class CrimeDetailFragment : Fragment() {
                         )
                     }
                 } else {
+                    Log.d(TAG, "Location received was NULL.") // <--- LOG 4
                     Snackbar.make(
                         binding.root,
                         "Ensure GPS is enabled.",
@@ -292,7 +299,11 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
             binding.updateGps.isEnabled = true
+
+
+
         } catch (e: SecurityException) {
+            Log.e(TAG, "SecurityException: Location permission missing or disabled.", e) // <--- LOG 6
             Snackbar.make(
                 binding.root,
                 "Location permission Required. Check Settings.",
@@ -345,10 +356,10 @@ class CrimeDetailFragment : Fragment() {
             }
 
             //GPS update display
-            latitude.text = getString(R.string.latitude_label)//, String.format("%.4f", crime.latitude))
-            longitude.text = getString(R.string.longitude_label)//, String.format("%.4f", crime.longitude))
-            updateGps.isEnabled = isLocationPermissionGranted()
-
+            latitude.text = getString(R.string.latitude_label, String.format(java.util.Locale.US,"%.4f", crime.latitude))
+            longitude.text = getString(R.string.longitude_label, String.format(java.util.Locale.US,"%.4f", crime.longitude))
+            //updateGps.isEnabled = isLocationPermissionGranted()
+            Log.d(TAG, "LOG7 updateUi: Displaying Lat=${String.format("%.4f", crime.latitude)}, Lon=${String.format("%.4f", crime.longitude)}")
 
 
             updatePhoto(crime.photoFileName)

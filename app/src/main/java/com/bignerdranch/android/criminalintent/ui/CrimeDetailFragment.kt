@@ -75,6 +75,7 @@ class CrimeDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        @Suppress("DEPRECATION")
         setHasOptionsMenu(true)
     }
 
@@ -319,9 +320,22 @@ class CrimeDetailFragment : Fragment() {
                     binding.crimePhoto.setImageBitmap(scaledBitmap)
                     binding.crimePhoto.tag = photoFileName
                 }
+
+                //Challenge: Detail Display
+                binding.crimePhoto.isClickable = true
+                binding.crimePhoto.setOnClickListener {
+                    findNavController().navigate(
+                        CrimeDetailFragmentDirections.showPhotoDetail(photoFile.path)
+                    )
+                }
+
             } else {
                 binding.crimePhoto.setImageBitmap(null)
                 binding.crimePhoto.tag = null
+
+                //Challenge: Detail Display
+                binding.crimePhoto.isClickable = false
+                binding.crimePhoto.setOnClickListener(null)
             }
         }
     }
